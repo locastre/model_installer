@@ -254,19 +254,17 @@ then
 	rm condapack.tar.gz
 elif [ "${POPTION}" == "P" ]
 then
-	#set up Conda environment
-	CONDAHOME=`conda info | grep "base environment" | awk '{ print $4 }'`
-	if [ -z "${CONDAHOME}" ]
-	then
-		echo "Anaconda may not be installed; python setup cannot continue"
-		echo "Exiting."
-		exit 1
-	fi
-	conda create -y --name ${MODEL_NAME} python=3.8
-
-	source ${CONDAHOME}/etc/profile.d/conda.sh
-
-	conda activate ${MODEL_NAME}
-	pip install -r requirements.txt
+	 #set up Conda environment
+        CONDAHOME=`conda info | grep "base environment" | awk '{ print $4 }'`
+        if [ -z "${CONDAHOME}" ]
+        then
+                echo "Anaconda may not be installed; python setup cannot continue"
+                echo "Exiting."
+                exit 1
+        fi
+        conda deactivate
+        conda env create -f ${MODEL_FOLDER}/environment.yml
+        MODEL_NAME=`cat ${MODEL_FOLDER}/environment.yml | head -1 | awk '{ print $2 }'`
+        conda activate ${MODEL_NAME}
 fi
 
