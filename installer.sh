@@ -265,6 +265,6 @@ then
         conda deactivate
         conda env create -f ${MODEL_FOLDER}/environment.yml
         MODEL_NAME=`cat ${MODEL_FOLDER}/environment.yml | head -1 | awk '{ print $2 }'`
-        conda activate ${MODEL_NAME}
+        #conda activate ${MODEL_NAME}
 fi
 
