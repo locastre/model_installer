@@ -8,7 +8,7 @@ function print_stratis_logo {
         echo " "
 }
 
-N_MODELS=11
+N_MODELS=12
 
 function define_models {
         N=$1
@@ -46,6 +46,9 @@ function define_models {
 
           11)
                 MODEL_NAME=MR_HN_Nodule_SMIT
+                ;;
+		  12)
+                MODEL_NAME=CT_Lung_OAR_SMITplus
                 ;;
            *)
                 echo Error
