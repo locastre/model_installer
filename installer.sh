@@ -72,7 +72,9 @@ function help_text {
         echo "          -m : [1-${N_MODELS}] Integer number to select model to install. For list of available options, see below. "
         echo "          -d : Directory to install model with network weights "
         echo "          -p : [P/C/N] Setup and install Python environment P: setup Conda env from python requirements.txt; C: Conda pack download; N: No install. " #User must already have Anaconda installed and initiated. "
-        echo "          -n : [1-${N_MODELS}] Print the model name of number argument "
+        echo "          -n : [1-${N_MODELS}] Print the model name of number argument "		
+	    echo "          -r : Provide URL to tar archive for model weights (optional) "
+		echo "          -u : User credentials for private GitHub repo, format is user:token "
         echo "          -h : Print help menu "
         echo " "
         print_model_opts $N_MODELS
@@ -97,7 +99,7 @@ POPTION="N"
 
 
 # parse input arguments
-while getopts ":hm:d:ip:n:u:" opt; do
+while getopts ":hm:d:ip:n:u:r:" opt; do
   case $opt in
     h)
         help_text $N_MODELS
@@ -125,6 +127,9 @@ while getopts ":hm:d:ip:n:u:" opt; do
       ;;
     u)
         TOK=${OPTARG}
+      ;;
+    r)
+        MODEL_WEIGHTS=${OPTARG}
       ;;
 
     \?)
@@ -227,6 +232,8 @@ fi
 mkdir -p ${INSTALLDIR}
 cd ${INSTALLDIR}
 
+
+
 if [ -z "$TOK" ]
 then
         MODEL_GIT="https://github.com/cerr/${MODEL_NAME}.git"
@@ -237,15 +244,20 @@ fi
 echo git clone ${MODEL_GIT}
 git clone ${MODEL_GIT}
 
-#MODEL_FOLDER=`basename ${MODEL_GIT} | sed "s/.git//g"`
+
 
 MODEL_FOLDER=${INSTALLDIR}/${MODEL_NAME}
 cd ${MODEL_FOLDER}
 
-MODEL_WEIGHTS_HASH=`cat model.txt | grep MODEL_WEIGHTS | awk '{ print $2 }'`
+if [ -z "${MODEL_WEIGHTS}" ]
+then
+	MODEL_WEIGHTS_HASH=`cat model.txt | grep MODEL_WEIGHTS | awk '{ print $2 }'`
+	MODEL_WEIGHTS=`base64 -d <<<${MODEL_WEIGHTS_HASH} | gunzip`
+fi
+
+
 CONDAPACK_HASH=`cat model.txt | grep CONDAPACK | awk '{ print $2 }'`
 
-MODEL_WEIGHTS=`base64 -d <<<${MODEL_WEIGHTS_HASH} | gunzip`
 echo wget -O model_weights.tar.gz -L ${MODEL_WEIGHTS}
 wget -O model_weights.tar.gz -L ${MODEL_WEIGHTS}
 echo tar xf model_weights.tar.gz

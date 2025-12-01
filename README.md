@@ -1,6 +1,6 @@
 # CERR Segmentation Model Installer
 
-Locally set up and install network weights, scripts and (optionally) Conda environments for running AI-based image segmentation and registration models.
+Locally set up and install network weights, scripts and Python environments for running AI-based image segmentation and registration models.
 
 ```
       ___           ___           ___           ___     
@@ -25,7 +25,9 @@ Usage Information:
 		-m : [1-9] Integer number to select model to install. For list of available options, see below. 
 		-d : Directory to install model with network weights 
 		-p : [P/C/N] Setup and install Python environment P: setup Conda env from python requirements.txt; C: Conda pack download; N: No install. 
-		-n : [1-9] Print the model name of number argument 
+		-n : [1-9] Print the model name of number argument
+	    -r : Provide URL to tar archive for model weights (optional)
+		-u : User credentials for private GitHub repo, format is "user:token"
 		-h : Print help menu 
  
 The following are the list of available models. When passing the argument to installer, select the number of the model to download: 
